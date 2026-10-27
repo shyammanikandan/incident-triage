@@ -16,10 +16,5 @@ app.get('/health', async (_req, res) => {
   }
 });
 
-// TEMPORARY: delete after testing
-app.get('/boom', () => {
-  throw new Error('DB password is triage_dev_pw');
-});
-
 app.use(notFoundHandler);
 app.use(errorHandler);
