@@ -9,7 +9,7 @@ export const notFoundHandler: RequestHandler = (req, _res, next) => {
   );
 };
 
-export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
+export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
   if (err instanceof AppError) {
     res
       .status(err.statusCode)
@@ -29,19 +29,15 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   }
 
   if ((err as { type?: string }).type === 'entity.parse.failed') {
-    res
-      .status(400)
-      .json({
-        error: { code: 'INVALID_JSON', message: 'Malformed JSON body' },
-      });
+    res.status(400).json({
+      error: { code: 'INVALID_JSON', message: 'Malformed JSON body' },
+    });
     return;
   }
 
   // Anything else is a bug: log the details, hide them from the client
-  console.error(err); // replaced by Pino in Task 2
-  res
-    .status(500)
-    .json({
-      error: { code: 'INTERNAL_ERROR', message: 'Something went wrong' },
-    });
+  req.log.error({ err }, 'Unhandled error');
+  res.status(500).json({
+    error: { code: 'INTERNAL_ERROR', message: 'Something went wrong' },
+  });
 };

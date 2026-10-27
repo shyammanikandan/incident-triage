@@ -1,9 +1,23 @@
 import express from 'express';
+import { pinoHttp } from 'pino-http';
+import { randomUUID } from 'node:crypto';
+import { logger } from './logger.js';
 import { sql } from 'drizzle-orm';
 import { db } from './db/index.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 
 export const app = express();
+app.use(
+  pinoHttp({
+    logger,
+    genReqId: (req, res) => {
+      const incoming = req.headers['x-request-id'];
+      const id = typeof incoming === 'string' ? incoming : randomUUID();
+      res.setHeader('x-request-id', id);
+      return id;
+    },
+  }),
+);
 app.use(express.json());
 
 app.get('/health', async (_req, res) => {
@@ -15,6 +29,8 @@ app.get('/health', async (_req, res) => {
     res.status(503).json({ status: 'degraded', db: 'down' });
   }
 });
-
+app.get('/boom', () => {
+  throw new Error('test failure');
+});
 app.use(notFoundHandler);
 app.use(errorHandler);
