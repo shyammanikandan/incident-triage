@@ -5,6 +5,7 @@ import { logger } from './logger.js';
 import { sql } from 'drizzle-orm';
 import { db } from './db/index.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
+import { projectsRouter } from './projects/projects.routes.js';
 
 export const app = express();
 app.use(
@@ -29,6 +30,9 @@ app.get('/health', async (_req, res) => {
     res.status(503).json({ status: 'degraded', db: 'down' });
   }
 });
+
+app.use('/projects', projectsRouter);
+
 app.get('/boom', () => {
   throw new Error('test failure');
 });
