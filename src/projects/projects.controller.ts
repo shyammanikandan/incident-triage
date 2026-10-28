@@ -4,6 +4,7 @@ import type { CreateProjectInput } from './projects.schema.js';
 
 export async function createProjectHandler(req: Request, res: Response) {
   const input = req.body as CreateProjectInput;
+  req.log.debug({ name: input.name }, 'Creating project');
   const project = await createProject(input);
   res.status(201).json(project);
 }

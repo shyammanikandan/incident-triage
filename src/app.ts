@@ -21,12 +21,12 @@ app.use(
 );
 app.use(express.json());
 
-app.get('/health', async (_req, res) => {
+app.get('/health', async (req, res) => {
   try {
-    await db.execute(sql`select 1`);
-
+    await db.execute(sql`SELECT 1`);
     res.json({ status: 'ok', db: 'up' });
-  } catch {
+  } catch (err) {
+    req.log.error({ err }, 'Health check: database query failed');
     res.status(503).json({ status: 'degraded', db: 'down' });
   }
 });
