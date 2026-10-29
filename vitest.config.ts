@@ -6,6 +6,7 @@ try {
 
 export default defineConfig({
   test: {
+    fileParallelism: false,
     env: {
       NODE_ENV: 'test',
       LOG_LEVEL: 'silent',
