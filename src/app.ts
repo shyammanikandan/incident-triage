@@ -4,6 +4,7 @@ import { randomUUID } from 'node:crypto';
 import { logger } from './logger.js';
 import { sql } from 'drizzle-orm';
 import { db } from './db/index.js';
+import { apiKeysRouter } from './api-keys/api-keys.routes.js';
 import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
 import { projectsRouter } from './projects/projects.routes.js';
 
@@ -33,6 +34,7 @@ app.get('/health', async (req, res) => {
 
 app.use('/projects', projectsRouter);
 
+app.use('/projects/:projectId/api-keys', apiKeysRouter);
 app.get('/boom', () => {
   throw new Error('test failure');
 });

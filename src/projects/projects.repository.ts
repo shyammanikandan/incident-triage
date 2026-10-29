@@ -1,4 +1,4 @@
-import { desc } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import { db } from '../db/index.js';
 import { projects } from '../db/schema.js';
 import type { CreateProjectInput } from './projects.schema.js';
@@ -14,4 +14,15 @@ export async function insertProject(
 
 export async function findAllProjects(): Promise<Project[]> {
   return db.select().from(projects).orderBy(desc(projects.createdAt));
+}
+
+export async function findProjectById(
+  id: string,
+): Promise<Project | undefined> {
+  const [project] = await db
+    .select()
+    .from(projects)
+    .where(eq(projects.id, id))
+    .limit(1);
+  return project;
 }
