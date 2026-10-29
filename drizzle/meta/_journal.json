@@ -15,6 +15,13 @@
       "when": 1793099758417,
       "tag": "0001_create_projects",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793265498763,
+      "tag": "0002_create_api_keys",
+      "breakpoints": true
     }
   ]
 }
