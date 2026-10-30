@@ -28,6 +28,13 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, _next) => {
     return;
   }
 
+  if ((err as { type?: string }).type === 'entity.too.large') {
+    res.status(413).json({
+      error: { code: 'PAYLOAD_TOO_LARGE', message: 'Request body exceeds 1MB' },
+    });
+    return;
+  }
+
   if ((err as { type?: string }).type === 'entity.parse.failed') {
     res.status(400).json({
       error: { code: 'INVALID_JSON', message: 'Malformed JSON body' },
