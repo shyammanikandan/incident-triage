@@ -5,7 +5,7 @@ import { eq } from 'drizzle-orm';
 import { app } from '../app.js';
 import { db, pool } from '../db/index.js';
 import { apiKeys } from '../db/schema.js';
-import { resetDb } from '../test/helpers.js';
+import { createProjectWithKey, resetDb } from '../test/helpers.js';
 import { errorHandler } from './error-handler.js';
 import { requireApiKey } from './require-api-key.js';
 
@@ -23,21 +23,6 @@ beforeEach(async () => {
 afterAll(async () => {
   await pool.end();
 });
-
-async function createProjectWithKey() {
-  const project = await request(app)
-    .post('/projects')
-    .send({ name: 'test-project' });
-  const apiKey = await request(app).post(
-    `/projects/${project.body.id}/api-keys`,
-  );
-
-  return {
-    projectId: project.body.id as string,
-    keyId: apiKey.body.id as string,
-    key: apiKey.body.key as string,
-  };
-}
 
 describe('requireApiKey', () => {
   it('accepts a valid key and sets the projectId', async () => {
