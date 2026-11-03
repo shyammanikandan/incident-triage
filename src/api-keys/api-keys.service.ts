@@ -1,6 +1,7 @@
 import { AppError } from '../errors.js';
 import { findProjectById } from '../projects/projects.repository.js';
 import { generateApiKey } from './api-key.util.js';
+
 import { findApiKeysByProject, insertApiKey } from './api-keys.repository.js';
 
 async function ensureProjectExists(projectId: string): Promise<void> {

@@ -1,5 +1,6 @@
 import type { ErrorRequestHandler, RequestHandler } from 'express';
 import { ZodError } from 'zod';
+
 import { AppError } from '../errors.js';
 
 // Unknown routes become a 404 AppError

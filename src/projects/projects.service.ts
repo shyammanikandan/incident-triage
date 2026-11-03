@@ -1,10 +1,11 @@
 import { AppError } from '../errors.js';
+import type { CreateProjectInput } from './projects.schema.js';
+
 import {
   findAllProjects,
   insertProject,
   type Project,
 } from './projects.repository.js';
-import type { CreateProjectInput } from './projects.schema.js';
 
 const UNIQUE_VIOLATION = '23505';
 

@@ -1,15 +1,18 @@
 import express from 'express';
 import { pinoHttp } from 'pino-http';
 import { randomUUID } from 'node:crypto';
-import { logger } from './logger.js';
 import { sql } from 'drizzle-orm';
+
 import { db } from './db/index.js';
+import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
+import { logger } from './logger.js';
+
+import { projectsRouter } from './projects/projects.routes.js';
 import { apiKeysRouter } from './api-keys/api-keys.routes.js';
 import { ingestRouter } from './ingest/ingest.routes.js';
-import { errorHandler, notFoundHandler } from './middleware/error-handler.js';
-import { projectsRouter } from './projects/projects.routes.js';
 
 export const app = express();
+
 app.use(
   pinoHttp({
     logger,
@@ -21,6 +24,7 @@ app.use(
     },
   }),
 );
+
 app.use(express.json({ limit: '1mb' }));
 
 app.get('/health', async (req, res) => {
@@ -40,5 +44,6 @@ app.use('/ingest', ingestRouter);
 app.get('/boom', () => {
   throw new Error('test failure');
 });
+
 app.use(notFoundHandler);
 app.use(errorHandler);

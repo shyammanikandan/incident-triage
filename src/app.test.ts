@@ -1,6 +1,7 @@
 import { describe, it, expect, afterAll } from 'vitest';
-import { pool } from './db/index.js';
 import request from 'supertest';
+
+import { pool } from './db/index.js';
 import { app } from './app.js';
 
 afterAll(async () => {

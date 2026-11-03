@@ -1,4 +1,5 @@
 import type { RequestHandler } from 'express';
+
 import { AppError } from '../errors.js';
 import { hashApiKey } from '../api-keys/api-key.util.js';
 import { findActiveApiKeyByHash } from '../api-keys/api-keys.repository.js';

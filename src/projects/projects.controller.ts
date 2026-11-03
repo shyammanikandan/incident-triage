@@ -1,6 +1,8 @@
 import type { Request, Response } from 'express';
-import { createProject, listProjects } from './projects.service.js';
+
 import type { CreateProjectInput } from './projects.schema.js';
+
+import { createProject, listProjects } from './projects.service.js';
 
 export async function createProjectHandler(req: Request, res: Response) {
   const input = req.body as CreateProjectInput;
