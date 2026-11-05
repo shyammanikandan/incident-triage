@@ -1,12 +1,6 @@
 import { Queue } from 'bullmq';
 import { createRedisConnection } from './redis.js';
-
-export const INGEST_QUEUE = 'ingest';
-
-export type IngestJobData = {
-  projectId: string;
-  logIds: string[];
-};
+import { INGEST_QUEUE, type IngestJobData } from './ingest.job.js';
 
 export const ingestQueue = new Queue<IngestJobData>(INGEST_QUEUE, {
   connection: createRedisConnection({ enableOfflineQueue: false }),
