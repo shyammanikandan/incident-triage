@@ -1,11 +1,11 @@
 import { describe, it, expect, afterAll } from 'vitest';
 import request from 'supertest';
 
-import { pool } from './db/index.js';
+import { closeConnections } from './test/helpers.js';
 import { app } from './app.js';
 
 afterAll(async () => {
-  await pool.end();
+  await closeConnections();
 });
 describe('GET /health', () => {
   it('returns ok when the database is up', async () => {

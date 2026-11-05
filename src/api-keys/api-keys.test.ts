@@ -2,9 +2,9 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
 import { app } from '../app.js';
-import { db, pool } from '../db/index.js';
+import { db } from '../db/index.js';
 import { apiKeys } from '../db/schema.js';
-import { resetDb } from '../test/helpers.js';
+import { resetDb, closeConnections } from '../test/helpers.js';
 import { hashApiKey } from './api-key.util.js';
 
 beforeEach(async () => {
@@ -12,7 +12,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await pool.end();
+  await closeConnections();
 });
 
 async function createTestProject(): Promise<string> {

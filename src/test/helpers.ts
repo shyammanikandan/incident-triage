@@ -2,9 +2,16 @@ import { sql } from 'drizzle-orm';
 import { db } from '../db/index.js';
 import request from 'supertest';
 import { app } from '../app.js';
+import { pool } from '../db/index.js';
+import { ingestQueue } from '../queue/ingest.queue.js';
 
 export async function resetDb() {
   await db.execute(sql`TRUNCATE TABLE projects CASCADE`);
+}
+
+export async function closeConnections() {
+  await ingestQueue.close();
+  await pool.end();
 }
 
 export async function createProjectWithKey(name = 'test-project') {

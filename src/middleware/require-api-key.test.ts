@@ -2,10 +2,14 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import express from 'express';
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
-import { app } from '../app.js';
-import { db, pool } from '../db/index.js';
+
+import { db } from '../db/index.js';
 import { apiKeys } from '../db/schema.js';
-import { createProjectWithKey, resetDb } from '../test/helpers.js';
+import {
+  createProjectWithKey,
+  resetDb,
+  closeConnections,
+} from '../test/helpers.js';
 import { errorHandler } from './error-handler.js';
 import { requireApiKey } from './require-api-key.js';
 
@@ -21,7 +25,7 @@ beforeEach(async () => {
 });
 
 afterAll(async () => {
-  await pool.end();
+  await closeConnections();
 });
 
 describe('requireApiKey', () => {

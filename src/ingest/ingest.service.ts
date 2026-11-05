@@ -1,6 +1,9 @@
 import type { LogEntryInput } from './ingest.schema.js';
 import { insertLogs, type NewLog } from './ingest.repository.js';
 
+import { logger } from '../logger.js';
+
+import { enqueueIngestJob } from '../queue/ingest.queue.js';
 export async function ingestLogs(
   projectId: string,
   entries: LogEntryInput[],
@@ -16,5 +19,16 @@ export async function ingestLogs(
     context: entry.context,
   }));
 
-  return insertLogs(rows);
+  const logIds = await insertLogs(rows);
+
+  try {
+    await enqueueIngestJob({ projectId, logIds });
+  } catch (err) {
+    logger.error(
+      { err, projectId, logIds },
+      'Logs stored but not queued for processing',
+    );
+  }
+
+  return logIds.length;
 }

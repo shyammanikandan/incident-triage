@@ -1,15 +1,15 @@
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { app } from '../app.js';
-import { pool } from '../db/index.js';
-import { resetDb } from '../test/helpers.js';
+
+import { resetDb, closeConnections } from '../test/helpers.js';
 
 beforeEach(async () => {
   await resetDb();
 });
 
 afterAll(async () => {
-  await pool.end();
+  await closeConnections();
 });
 
 describe('POST /projects', () => {

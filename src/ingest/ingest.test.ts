@@ -2,16 +2,20 @@ import { afterAll, beforeEach, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { eq } from 'drizzle-orm';
 import { app } from '../app.js';
-import { db, pool } from '../db/index.js';
+import { db } from '../db/index.js';
 import { logs } from '../db/schema.js';
-import { createProjectWithKey, resetDb } from '../test/helpers.js';
+import {
+  createProjectWithKey,
+  resetDb,
+  closeConnections,
+} from '../test/helpers.js';
 
 beforeEach(async () => {
   await resetDb();
 });
 
 afterAll(async () => {
-  await pool.end();
+  await closeConnections();
 });
 
 const validLog = {
